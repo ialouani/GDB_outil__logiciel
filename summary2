@@ -1,0 +1,91 @@
+find :
+find ../ -name hash.h permet de chercher en profondeur depuis la racine du depot tous les fichiers nommes hash.h et d'afficher le chemin comme suit: ../(-suite-).
+c'etait une remarque pas plus.
+pour recuperer un .bashrc perdu (ecriture > dans un fichier shell):
+cp /etc/skel/.bashrc ~/.bashrc permet de copier un bashrc propose mis par defaut dans etc/skel et puisque . de le mettre a jour + source ~/.bashrc reconfigure tout des le depart../ .
+voilà.(rq. tres UTILE)
+./compile.sh cree les .so .a librairies utiles.
+a->Pour executer ./example_dynamique on fait un make exec_dynamic__2 qui execute ./update.sh dans lequel a l'interieur on fait:
+LD_LIBRARY_PATH=/usr/local/lib
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)
+export LD_LIBRARY_PATH
+./example_dynamique
+un echo $LD_LIBRARY_PATH sur le terminal en extern ne donnera rien ou bien la valeur par defaut dans /etc/skel/.bashrc par un retrouvaille via: find /etc -name .bashrc ..
+2!!:::::: Tables de hashage
+----------------------------------
+EXO___5:***************************************************
+On execute un make clean ; make exec_static__1 et ca renvoie 0 sur "abcd" sans un HashAdd dessus avant => bug dans hashCherche.
+EXO___6:***************************************************
+sur les generations de .o direct(s!!(2||||)) uniquement.
+EXO___7:***************************************************
+bt: pile d'appel fonctionnel d'origine et de point d'arret optionnel.
+up/down naviguer bien FAIT__ sur cette pile..///
+=>procedures:
+make clean ; make debug_start_static puis br 19 puis r ca s'arrete a hash_init.
+=>=>(on place la verification de l'appartenance au 2ieme test) PUIS ON FAIT un n qui affiche la commande suivante avec arret(n) sans l'executer bien sur puis un n suivant celui-la va afficher le precedent puis la commande qui nous interesse. Là, ON DOIT TAPER step car vu la commande on devrait rentrer dans la fonction pour voir ce qui cloche avec un bt on visualise: #1 hashCherche puis #0 main (par empilation croissant vers le haut) puis on fait n pour rentrer (renvoie la premiere instruction puis avec un autre n puis un p r ca va afficher value=0 resultat de sortie de l'execution de la commande precedente sortie par (gdb)::;;;;. Apres bcp de next, on s'apercoit que la commande (r==0) qui apres un n va faire sortir } donc execution de celle-ci donc r vaut 0 des le depart ce qui nous fait penser au fait que p soit NULL. Vu qu'on peut pas revenir en arriere et la boucle s'est arrete des le premier tour (pas de sortie de p=p->next) on peut faire un p p qui va tester si p==NULL tout au long de l'exec. a partir de la ligne concernee,ca retourne 0x0 donc p==NULL donc logiquement avec le premier test ca devrait renvoyer 0. Avec un bt(meme) puis un n ; cela va afficher abcd=>0 car step est termine (bt renvoie #0 main apres;ainsi que la commande SUIVANTE A FAIRE<<) ; avec bt puis n on remet les pas sur les executions du main bt trace les 2 n sort de step par resultat final l'affiche + prochaine instruction + indication de sortie par la coloration du mot main(). Un prochain n sans step prevue a l'avance va executer le corps de la fonction et du coup faire le printf prevu a l'avance dans la sortie precedente de gdb et afficher le prochain printf a faire suivant le fichier example.c. 
+Remarques: les fonctions appelantes ont des adresses croissantes```` empilées sur le haut ainsi le main point d'entree de la mecanique de l'executable pour changer les etats de variantes est celui qui est plus bas mais plus haut en memoire(rsp/rbp).
+EXO___8:******************************************************
+Autre méthode pour y procéder:
+br 19 puis r puis n puis n (pas execution du probleme) puis step pour rentrer dedans (analyzer les fonctionnalitees servant de sortie finale) puis bt puis up qui permet de naviguer sur la pile cad. avec bt puis up ca permet de se deplacer depuis le main vers le main de la fonction en sortir bt #1 (ICI.//) donc ~break sur hashCherche puis avec un n normal on fait sotir la premiere instruction int r=0,value; C'EST exactement pareil que faire un double n puis un step puis un n qui va faire la meme chose.
+RESUME IMPORTANT--______: br 19 + r + n + n + step + bt + up(main(()) en #1(id de hashCherche) avec la fonctionnalitee du main qui a permis ca et la ligne ..: fonctionnalitée...) + n <=> br 19 + n + n + step + n ;;les deux vont afficher la ligne suivie de la pré-commande: int r=0,value; ./////
+++ le plus profond.
+++ down renvoie le plus profond en zero avec la ligne/fichier accompagnee du prototype pour dire que c'est mis en mise a zero suivant la fonctionnalite suivante avec la ligne toujours..///
+ca se compense:un down  peut etre annule par un up.
+EXO___8:*******************************************************************
+Voir commentaires sur hash.c et les ajouts sur example.c + Makefile.
+A retenir: un test avant un autre apres une boucle while peut beugguer l'execution normale spontanee attendue d'un programme.
+(on fait avancer un test sur un autre avec un return du coup on renvoie la mauvaise valeur par defaut de return et defaut de batterie de tests ensemble selective.).///////
+EXO___9:*******************************************************************
+3 bugs:
+1->oubli de parentheses dans un while evitant par cela l'incrementation: l=l->next du coup boucle infinie se terminant par un Segfault.
+2->list_new alloue sur un segment de donnees dans le tas de taille sizeof(void*) et non pas sizeof(struct list) ce qui pose probleme au niveau de stockage des elements et acces a ces derniers au niveau de print_list apres.
+3->l'initialisation de l dans le main fournit un next qui permet d'interpreter des zones memoires plus lointaines en non struct list* ce qui peut conduire a ne plus savoir ce qu'on fera pour afficher adresse->value qui peut se faire via un printf mais la valeur n'est pas convenable du tout cest une fuite memoire prenant du temps et corrigee par struct list* l=NULL pour que *l=p=list_new(value) dans list_add_front fixe le champ next a NULL et permet les operations de add_head usuel tout en conservant LA SENTINELLE VOULUE des le depart dans prev comme DANS NEXT.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
