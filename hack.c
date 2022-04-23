@@ -50,8 +50,10 @@ struct Cell *reverseList(struct Cell *list){
   list->prev=tmp;
   if (tmp==NULL)
     return list;
-  else
+  else{
+    tmp->prev=list;
     return reverseList(tmp);
+  }
 }
 
 void print(struct Cell *l){
@@ -62,6 +64,7 @@ void print(struct Cell *l){
   printf("%d ",l->value);
   print(l->next);
 }
+
 
 void freeList(struct Cell *l){
   struct Cell *tmp;
@@ -81,7 +84,9 @@ int main(){
   for(i=10;i<50;i+=2)
     list = removeValue(list,i);
   print(list);
+  printf("************************");
   list=reverseList(list);
+  printf("************************");
   print(list);
   freeList(list);
   return EXIT_SUCCESS;
