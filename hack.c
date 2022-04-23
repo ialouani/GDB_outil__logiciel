@@ -83,11 +83,14 @@ int main(){
   print(list);
   for(i=10;i<50;i+=2)
     list = removeValue(list,i);
+  printf("************************\n");
+  printf("************************");
   print(list);
   printf("************************");
   list=reverseList(list);
   printf("************************");
   print(list);
+  printf("************************");
   freeList(list);
   return EXIT_SUCCESS;
 }
