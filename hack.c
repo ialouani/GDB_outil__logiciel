@@ -5,7 +5,7 @@
 void randstack(int i){
   int j=rand();
   if (i>0)
-    randstack(i-1);
+    randstack(i-1);//sans std=c99 ca passes.
 }
 
 struct Cell {
@@ -49,7 +49,16 @@ struct Cell *reverseList(struct Cell *list){
   list->next = list->prev;
   list->prev=tmp;
   if (tmp==NULL)
-    return list;
+    return list;/*ca doit nous alerter:
+avec gdb: br 90 step n..n jusqu'à if(..) p *tmp affiche 1..99 normalement
+printf classique le fait (ou bien jouer sur les retours) 
+=>si tmp==NULL ca veut dire retour cas de base sur tmp en mode recursif
+=>tmp se decale => if faurait analyser list (faire un lien)
+=>p *list *list->prev/next oscille depuis 1 vers 1 0 ..
+cela veut dire qu'à chaque tout les 2 sont inversees puis re-appel
+=>pour prendre en compte cela: on ajoute SIMPLEMENT: tmp->prev=list
+puis retour classique de reverseList(tmp) pour que le processus se poursuit
+		*/
   else{
     tmp->prev=list;
     return reverseList(tmp);
